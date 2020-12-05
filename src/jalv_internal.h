@@ -166,12 +166,21 @@ typedef struct {
 	uint8_t  body[];
 } ControlChange;
 
+struct socket_event {
+    uint16_t port_number;
+    float value;
+};
+
+
+#define SOCKET_QUEUE_SIZE 4096
+
 typedef struct {
 	char*    name;              ///< Client name
 	int      name_exact;        ///< Exit if name is taken
 	char*    uuid;              ///< Session UUID
 	char*    load;              ///< Path for state to load
 	char*    jackname;          ///< Alternate name for port;
+	char*    sockname;          ///< Name for unix domain socket;
 	char*    preset;            ///< URI of preset to load
 	char**   controls;          ///< Control values
 	int16_t  midi_channel;      ///< Restrict to MIDI channel.
@@ -354,6 +363,9 @@ struct Jalv {
 	bool               safe_restore;   ///< Plugin restore() is thread-safe
 	JalvFeatures       features;
 	const LV2_Feature** feature_list;
+	struct socket_event *sock_queue;
+	int sock_queue_head;
+	int sock_queue_tail;
 };
 
 int

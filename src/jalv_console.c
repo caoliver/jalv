@@ -45,6 +45,7 @@ print_usage(const char* name, bool error)
 	fprintf(os, "  -d           Dump plugin <=> UI communication\n");
 	fprintf(os, "  -m CHAN      Restrict MIDI channel\n");
 	fprintf(os, "  -U URI       Load the UI with the given URI\n");
+	fprintf(os, "  -S PATH      Pathname for control socket\n");
 	fprintf(os, "  -h           Display this help and exit\n");
 	fprintf(os, "  -l DIR       Load state from save directory\n");
 	fprintf(os, "  -j NAME      Specify name for jack ports\n");
@@ -100,6 +101,12 @@ jalv_init(int* argc, char*** argv, JalvOptions* opts)
 				return 1;
 			}
 			opts->jackname = jalv_strdup((*argv)[a]);
+		} else if ((*argv)[a][1] == 'S') {
+			if (++a == *argc) {
+				fprintf(stderr, "Missing argument for -S\n");
+				return 1;
+			}
+			opts->sockname = jalv_strdup((*argv)[a]);
 		} else if ((*argv)[a][1] == 'l') {
 			if (++a == *argc) {
 				fprintf(stderr, "Missing argument for -l\n");

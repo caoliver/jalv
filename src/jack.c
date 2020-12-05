@@ -217,6 +217,23 @@ jack_process_cb(jack_nframes_t nframes, void* data)
 	}
 	jalv->request_update = false;
 
+	// Do we have a socket queue to process?
+	// This will take precedence over UI since it comes second.
+	if (jalv->sock_queue) {
+	    while (jalv->sock_queue_tail != jalv->sock_queue_head) {
+		int head = jalv->sock_queue_head;
+		uint16_t port_number = jalv->sock_queue[head].port_number;
+		if (port_number < jalv->num_ports) {
+		    struct Port* const port = &jalv->ports[port_number];
+		    if (port->type == TYPE_CONTROL)
+			port->control = jalv->sock_queue[head].value;
+		}
+		head++;
+		jalv->sock_queue_head = head != SOCKET_QUEUE_SIZE ? head : 0;
+	    }
+	}
+
+
 	/* Run plugin for this cycle */
 	const bool send_ui_updates = jalv_run(jalv, nframes);
 

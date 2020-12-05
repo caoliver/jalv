@@ -258,6 +258,7 @@ def build(bld):
     src/lv2_evbuf.c
     src/state.c
     src/symap.c
+    src/socket.c
     src/worker.c
     src/zix/ring.c
     '''

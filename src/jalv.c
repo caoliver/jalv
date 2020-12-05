@@ -21,6 +21,7 @@
 #include "jalv_internal.h"
 #include "lv2_evbuf.h"
 #include "worker.h"
+#include "socket.h"
 
 #include "lilv/lilv.h"
 #include "lv2/atom/atom.h"
@@ -1226,6 +1227,15 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 		jalv_backend_activate_port(jalv, i);
 	}
 
+	// This gets done here 'cos clients need the port dictionary
+	// to be completed prior to the first connection.
+	if (jalv->opts.sockname) {
+	    jalv->sock_queue =
+		malloc(SOCKET_QUEUE_SIZE * sizeof(struct socket_event));
+	    if (jalv_socket_init(jalv) == -1)
+		die("Client socket creation failed.\n");
+	}
+
 	/* Print initial control values */
 	for (size_t i = 0; i < jalv->controls.n_controls; ++i) {
 		ControlID* control = jalv->controls.controls[i];
@@ -1254,6 +1264,10 @@ jalv_close(Jalv* const jalv)
 	jalv->exit = true;
 
 	fprintf(stderr, "Exiting...\n");
+
+	/* Stop socket handler if it was requested. */
+	if (jalv->opts.sockname)
+	    jalv_socket_finish(jalv);
 
 	/* Terminate the worker */
 	jalv_worker_finish(&jalv->worker);
