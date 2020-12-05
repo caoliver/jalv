@@ -129,6 +129,8 @@ jalv_init(int* argc, char*** argv, JalvOptions* opts)
 		  "Use Jalv generic UI and not the plugin UI", NULL},
 		{ "buffer-size", 'b', 0, G_OPTION_ARG_INT, &opts->buffer_size,
 		  "Buffer size for plugin <=> UI communication", "SIZE"},
+		{ "midi-channel=CHAN", 'm', 0, G_OPTION_ARG_INT,
+		  &opts->midi_channel, "Restrict MIDI channel", NULL },
 		{ "update-frequency", 'r', 0, G_OPTION_ARG_DOUBLE, &opts->update_rate,
 		  "UI update frequency", NULL},
 		{ "control", 'c', 0, G_OPTION_ARG_STRING_ARRAY, &opts->controls,

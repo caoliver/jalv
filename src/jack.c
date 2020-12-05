@@ -201,10 +201,13 @@ jack_process_cb(jack_nframes_t nframes, void* data)
 				for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
 					jack_midi_event_t ev;
 					jack_midi_event_get(&ev, buf, i);
-					lv2_evbuf_write(&iter,
-					                ev.time, 0,
-					                jalv->urids.midi_MidiEvent,
-					                ev.size, ev.buffer);
+					if (jalv->opts.midi_channel < 0 ||
+					    ev.buffer[0] >= 0xF0 ||
+					    (ev.buffer[0] & 0x0F) == jalv->opts.midi_channel)
+					    lv2_evbuf_write(&iter,
+							    ev.time, 0,
+							    jalv->urids.midi_MidiEvent,
+							    ev.size, ev.buffer);
 				}
 			}
 		} else if (port->type == TYPE_EVENT) {

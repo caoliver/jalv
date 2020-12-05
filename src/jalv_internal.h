@@ -174,6 +174,7 @@ typedef struct {
 	char*    jackname;          ///< Alternate name for port;
 	char*    preset;            ///< URI of preset to load
 	char**   controls;          ///< Control values
+	int16_t  midi_channel;      ///< Restrict to MIDI channel.
 	uint32_t buffer_size;       ///< Plugin <= >UI communication buffer size
 	double   update_rate;       ///< UI update rate in Hz
 	int      dump;              ///< Dump communication iff true

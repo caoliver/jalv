@@ -816,10 +816,15 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 	suil_init(argc, argv, SUIL_ARG_NONE);
 #endif
 
+	jalv->opts.midi_channel  = 0;
+
 	if (jalv_init(argc, argv, &jalv->opts)) {
 		jalv_close(jalv);
 		return -1;
 	}
+
+	if (--jalv->opts.midi_channel < 0 || jalv->opts.midi_channel > 15)
+	    jalv->opts.midi_channel = -1;
 
 	if (jalv->opts.uuid) {
 		printf("UUID: %s\n", jalv->opts.uuid);

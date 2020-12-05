@@ -43,6 +43,7 @@ print_usage(const char* name, bool error)
 	fprintf(os, "  -b SIZE      Buffer size for plugin <=> UI communication\n");
 	fprintf(os, "  -c SYM=VAL   Set control value (e.g. \"vol=1.4\")\n");
 	fprintf(os, "  -d           Dump plugin <=> UI communication\n");
+	fprintf(os, "  -m CHAN      Restrict MIDI channel\n");
 	fprintf(os, "  -U URI       Load the UI with the given URI\n");
 	fprintf(os, "  -h           Display this help and exit\n");
 	fprintf(os, "  -l DIR       Load state from save directory\n");
@@ -111,6 +112,12 @@ jalv_init(int* argc, char*** argv, JalvOptions* opts)
 				return 1;
 			}
 			opts->buffer_size = atoi((*argv)[a]);
+		} else if ((*argv)[a][1] == 'm') {
+			if (++a == *argc) {
+				fprintf(stderr, "Missing argument for -m\n");
+				return 1;
+			}
+			opts->midi_channel = atoi((*argv)[a]);
 		} else if ((*argv)[a][1] == 'c') {
 			if (++a == *argc) {
 				fprintf(stderr, "Missing argument for -c\n");
