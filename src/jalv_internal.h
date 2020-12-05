@@ -171,6 +171,7 @@ typedef struct {
 	int      name_exact;        ///< Exit if name is taken
 	char*    uuid;              ///< Session UUID
 	char*    load;              ///< Path for state to load
+	char*    jackname;          ///< Alternate name for port;
 	char*    preset;            ///< URI of preset to load
 	char**   controls;          ///< Control values
 	uint32_t buffer_size;       ///< Plugin <= >UI communication buffer size

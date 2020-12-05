@@ -46,6 +46,7 @@ print_usage(const char* name, bool error)
 	fprintf(os, "  -U URI       Load the UI with the given URI\n");
 	fprintf(os, "  -h           Display this help and exit\n");
 	fprintf(os, "  -l DIR       Load state from save directory\n");
+	fprintf(os, "  -j NAME      Specify name for jack ports\n");
 	fprintf(os, "  -n NAME      JACK client name\n");
 	fprintf(os, "  -p           Print control output changes to stdout\n");
 	fprintf(os, "  -s           Show plugin UI if possible\n");
@@ -92,6 +93,12 @@ jalv_init(int* argc, char*** argv, JalvOptions* opts)
 				return 1;
 			}
 			opts->uuid = jalv_strdup((*argv)[a]);
+		} else if ((*argv)[a][1] == 'j') {
+			if (++a == *argc) {
+				fprintf(stderr, "Missing argument for -j\n");
+				return 1;
+			}
+			opts->jackname = jalv_strdup((*argv)[a]);
 		} else if ((*argv)[a][1] == 'l') {
 			if (++a == *argc) {
 				fprintf(stderr, "Missing argument for -l\n");

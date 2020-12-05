@@ -113,6 +113,8 @@ jalv_init(int* argc, char*** argv, JalvOptions* opts)
 		  "Load state from save directory", "DIR" },
 		{ "preset", 'p', 0, G_OPTION_ARG_STRING, &opts->preset,
 		  "Load state from preset", "URI" },
+		{ "jack-name", 'j', 0, G_OPTION_ARG_STRING, &opts->jackname,
+		  "Name for jack ports", "PORT_NAME" },
 		{ "dump", 'd', 0, G_OPTION_ARG_NONE, &opts->dump,
 		  "Dump plugin <=> UI communication", NULL },
 		{ "ui-uri", 'U', 0, G_OPTION_ARG_STRING, &opts->ui_uri,

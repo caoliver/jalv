@@ -355,9 +355,12 @@ jack_create_client(Jalv* jalv)
 	}
 
 	/* Truncate client name to suit JACK if necessary */
-	if (strlen(jack_name) >= (unsigned)jack_client_name_size() - 1) {
-		jack_name[jack_client_name_size() - 1] = '\0';
+	if (jalv->opts.jackname) {
+	    jack_name = jalv->opts.jackname;
+	    jalv->opts.jackname = 0;
 	}
+	if (strlen(jack_name) >= (unsigned)jack_client_name_size() - 1)
+	    jack_name[jack_client_name_size() - 1] = '\0';
 
 	/* Connect to JACK */
 #ifdef JALV_JACK_SESSION
