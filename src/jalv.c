@@ -889,7 +889,14 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 	jalv->temp_dir = jalv_strdup("jalvXXXXXX");
 	_mktemp(jalv->temp_dir);
 #else
-	char* templ = jalv_strdup("/tmp/jalv-XXXXXX");
+#define TMPLT "/.jalv-XXXXXX"
+	char *tmpdir = getenv("TMPDIR");
+	char *templ;
+	if (tmpdir) {
+	    templ = malloc(strlen(tmpdir)+sizeof(TMPLT));
+	    sprintf(templ, "%s" TMPLT, tmpdir);
+	} else
+	    templ = jalv_strdup("/tmp" TMPLT);
 	jalv->temp_dir = jalv_strjoin(mkdtemp(templ), "/");
 	free(templ);
 #endif
