@@ -1211,11 +1211,6 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 		}
 	}
 
-	/* Apply loaded state to plugin instance if necessary */
-	if (state) {
-		jalv_apply_state(jalv, state);
-	}
-
 	if (jalv->opts.controls) {
 		for (char** c = jalv->opts.controls; *c; ++c) {
 			jalv_apply_control_arg(jalv, *c);
@@ -1254,6 +1249,11 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 	/* Activate Jack */
 	jalv_backend_activate(jalv);
 	jalv->play_state = JALV_RUNNING;
+
+	/* Apply loaded state to plugin instance if necessary */
+	if (state) {
+		jalv_apply_state(jalv, state);
+	}
 
 	return 0;
 }
