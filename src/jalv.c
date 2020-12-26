@@ -1225,8 +1225,6 @@ jalv_open(Jalv* const jalv, int* argc, char*** argv)
 	// This gets done here 'cos clients need the port dictionary
 	// to be completed prior to the first connection.
 	if (jalv->opts.sockname) {
-	    jalv->sock_queue =
-		malloc(SOCKET_QUEUE_SIZE * sizeof(struct socket_event));
 	    if (jalv_socket_init(jalv) == -1)
 		die("Client socket creation failed.\n");
 	}

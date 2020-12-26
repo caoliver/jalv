@@ -227,16 +227,16 @@ static void do_command(Jalv *jalv, char *cmdstr)
     if (cmdtok[0] == '#') {
 	show_controls_b64(jalv, connfd, cmdtok[1] == '#');
 	dprintf(connfd, "##\n");
+    } else if (cmdtok[0] == '<') {
+	
     } else if (cmdtok[0] == ':' && strlen(cmdtok) == 9) {
-	int tail = jalv->sock_queue_tail;
-	int next = tail+1;
-	if (next == SOCKET_QUEUE_SIZE)
-	    next = 0;
-	if (next != jalv->sock_queue_head) {
-	    decode_setter(&cmdtok[1],
-			  &jalv->sock_queue[tail].port_number,
-			  &jalv->sock_queue[tail].value);
-	    jalv->sock_queue_tail = next;
+	uint16_t portno;
+	float value;
+	decode_setter(&cmdtok[1], &portno, &value);
+	if (portno < jalv->num_ports) {
+	    struct Port* const port = &jalv->ports[portno];
+	    if (port->type = TYPE_CONTROL)
+		port->control = value;
 	}
     } else if (!strcmp(cmdtok, "list_params")) {
 	show_controls(jalv, connfd, param[0]);
