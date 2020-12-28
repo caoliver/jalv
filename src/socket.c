@@ -264,8 +264,10 @@ static void do_command(Jalv *jalv, char *cmdstr)
     if (cmdtok[0] == '#') {
 	show_controls_b64(jalv, connfd, cmdtok[1] == '#');
 	dprintf(connfd, "##\n");
-    } else if (cmdtok[0] == '<') {
+    } else if (!strcmp(cmdtok, "<")) {
 	load_preset_or_state(jalv, param);
+    } else if (!strcmp(cmdtok, ">")) {
+	jalv_save(jalv, param);
     } else if (cmdtok[0] == ':' && strlen(cmdtok) == 9) {
 	uint16_t portno;
 	float value;
