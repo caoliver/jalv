@@ -47,6 +47,7 @@ print_usage(const char* name, bool error)
 	fprintf(os, "  -U URI       Load the UI with the given URI\n");
 	fprintf(os, "  -S PATH      Pathname for control socket\n");
 	fprintf(os, "  -h           Display this help and exit\n");
+	fprintf(os, "  -i           Disable console interaction\n");
 	fprintf(os, "  -l DIR       Load state from save directory\n");
 	fprintf(os, "  -j NAME      Specify name for jack ports\n");
 	fprintf(os, "  -n NAME      JACK client name\n");

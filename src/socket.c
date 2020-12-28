@@ -279,6 +279,8 @@ static void do_command(Jalv *jalv, char *cmdstr)
 	}
     } else if (!strcmp(cmdtok, "list_params")) {
 	show_controls(jalv, connfd, param[0]);
+    } else if (!strcmp(cmdtok, "kill")) {
+	jalv_close_ui(jalv);
     } else
 	dprintf(connfd, "<FAIL>\n");
 }
