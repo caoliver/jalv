@@ -207,6 +207,43 @@ static char *nexttoken(char **str)
     return tokstart != out ? tokstart : NULL;
 }
 
+static LilvNode *preset;
+
+static int load_preset_by_title(Jalv*           jalv,
+				const LilvNode* node,
+				const LilvNode* title,
+				void*           sought)
+{
+    if (!strcmp(sought, lilv_node_as_string(title)))
+	preset = lilv_new_uri(jalv->world,
+			      lilv_node_as_string(node));
+}
+
+static void load_preset_or_state(Jalv * jalv, char *preset_name)
+{
+    LilvState * state      = NULL;
+    if (*preset_name != '/') {
+	jalv_unload_presets(jalv);
+	jalv_load_presets(jalv, load_preset_by_title, preset_name);
+	if (preset) {
+	    state = lilv_state_new_from_world(jalv->world, &jalv->map, preset);
+	    lilv_node_free(preset);
+	    preset = NULL;
+	}
+    } else {
+	char * path = jalv_strjoin(preset_name, "/state.ttl");
+	state = lilv_state_new_from_file(jalv->world, &jalv->map, NULL,
+					 path);
+	free(path);
+    }
+    if (state) {
+	if (jalv->preset)
+	    lilv_state_free(jalv->preset);
+	jalv->preset = state;
+	jalv_apply_state(jalv, state);
+    }
+}
+
 static void do_command(Jalv *jalv, char *cmdstr)
 {
     char *p = cmdstr;
@@ -228,7 +265,7 @@ static void do_command(Jalv *jalv, char *cmdstr)
 	show_controls_b64(jalv, connfd, cmdtok[1] == '#');
 	dprintf(connfd, "##\n");
     } else if (cmdtok[0] == '<') {
-	
+	load_preset_or_state(jalv, param);
     } else if (cmdtok[0] == ':' && strlen(cmdtok) == 9) {
 	uint16_t portno;
 	float value;
